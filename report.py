@@ -1,8 +1,10 @@
 #docstring- vincent
 import sqlite3
+import sys
 DATABASE = 'reportscore'
 db=sqlite3.connect(DATABASE)
 cursor = db.cursor()
+
 def print_all_score():
     cursor.execute('SELECT * FROM subject_score')
     results = cursor.fetchall()
@@ -22,13 +24,13 @@ line = ("="*107)
 
 print(line)
 print("Welcome to the report score program\nThis program will show you the score of each subject for each week and the avarage total for each week\nYou can choose to sort the data by week avarage total or by subject\nThe data is stored in a database and can be updated by the user")
-print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert data\n5. Delete data\n6. Update data\n7. Exit")
+print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert new data\n5. Delete data\n6. Update data\n7. Replace data\n8. Exit")
 print(line)
-user_input = input("What order? ")
+user_input = input("Input command number? ")
 while True:
-    if user_input == ("") or user_input == (" "):
+    if len(user_input) == 0 or user_input.isspace():
         print("Thats was not a valid input. Try again")
-        user_input = input("What order? ")
+        user_input = input("Input command number? ")
     try:
         if user_input == "1":
             print_all_score()
@@ -60,9 +62,14 @@ while True:
             print("Data inserted successfully")
         elif user_input == "5":
             week = input("Week: ")
-            cursor.execute('DELETE FROM subject_score WHERE week = ?', (week,))
-            db.commit()
-            print("Data deleted successfully")
+            print("Are you sure you want to delete the data? (yes/no)")
+            confirm = input().lower()
+            if confirm == "yes":
+                cursor.execute('DELETE FROM subject_score WHERE week = ?', (week,))
+                db.commit()
+                print("Data deleted successfully")
+            else:
+                print("Delete cancelled.")
         elif user_input == "6":
             week = input("Week: ")
             dvc = input("DVC: ")
@@ -72,16 +79,52 @@ while True:
             sci = input("SCI: ")
             adp = input("ADP: ")
             avarage_total = (int(dvc) + int(dgt) + int(eng) + int(mat) + int(sci) + int(adp)) / 6
-            cursor.execute('UPDATE subject_score SET dvc = ?, dgt = ?, eng = ?, mat = ?, sci = ?, adp = ?, avarage_total = ? WHERE week = ?', (dvc, dgt, eng, mat, sci, adp, avarage_total, week))
-            db.commit()
-            print("Data updated successfully")
+            print("Are you sure you want to update the data? (yes/no)")
+            confirm = input().lower()
+            if confirm == "yes":
+                cursor.execute('UPDATE subject_score SET dvc = ?, dgt = ?, eng = ?, mat = ?, sci = ?, adp = ?, avarage_total = ? WHERE week = ?', (dvc, dgt, eng, mat, sci, adp, avarage_total, week))
+                db.commit()
+                print("Data updated successfully")
+            else:
+                print("Update cancelled.")
         elif user_input == "7":
+            print("Replace data...")
+            cursor.execute('SELECT * FROM subject_score')
+            results = cursor.fetchall()
+            week = input("Replaced original week: ")
+            new_week = input("New week: ")
+            new_dvc = input("New DVC: ")
+            new_dgt = input("New DGT: ")
+            new_eng = input("New ENG: ")
+            new_mat = input("New MAT: ")
+            new_sci = input("New SCI: ")
+            new_adp = input("New ADP: ")
+            new_avarage_total = (int(new_dvc) + int(new_dgt) + int(new_eng) + int(new_mat) + int(new_sci) + int(new_adp)) / 6
+            for score in results:
+                if score[1] == week:
+                    cursor.execute('DELETE FROM subject_score WHERE week = ?', (week,))
+                    cursor.execute('INSERT INTO subject_score (week, dvc, dgt, eng, mat, sci, adp, avarage_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (new_week, new_dvc, new_dgt, new_eng, new_mat, new_sci, new_adp, new_avarage_total))
+                    db.commit()
+                    print("Data replaced successfully")
+                    break
+        elif user_input == "8":
             print("Goodbye!")
-            break
+            sys.exit()   
         else:
             print("Thats was not a valid input. Try again")
-            user_input = input("What order? ")
+            user_input = input("Input command number? ")
     except ValueError:
-        pass
+        try:
+            print("Thats was not a valid input. Try again")
+            user_input = input("Input command number? ")
+        except ValueError:
+            print("Thats was not a valid input. Try again")
+            user_input = input("Input command number? ")
+        except sqlite3.Error as e:
+            print(f"An error occurred: {e}")
+            sys.exit()
+
 if __name__ == "__main__":
-    pass
+    print("report.py is being run directly")
+else:
+    print("report.py is being imported into another module")
