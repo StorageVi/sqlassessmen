@@ -22,7 +22,7 @@ line = ("="*107)
 
 print(line)
 print("Welcome to the report score program\nThis program will show you the score of each subject for each week and the avarage total for each week\nYou can choose to sort the data by week avarage total or by subject\nThe data is stored in a database and can be updated by the user")
-print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert data\n5. Delete data\n6. Exit")
+print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert data\n5. Delete data\n6. Update data\n7. Exit")
 print(line)
 user_input = input("What order? ")
 while True:
@@ -64,6 +64,18 @@ while True:
             db.commit()
             print("Data deleted successfully")
         elif user_input == "6":
+            week = input("Week: ")
+            dvc = input("DVC: ")
+            dgt = input("DGT: ")
+            eng = input("ENG: ")
+            mat = input("MAT: ")
+            sci = input("SCI: ")
+            adp = input("ADP: ")
+            avarage_total = (int(dvc) + int(dgt) + int(eng) + int(mat) + int(sci) + int(adp)) / 6
+            cursor.execute('UPDATE subject_score SET dvc = ?, dgt = ?, eng = ?, mat = ?, sci = ?, adp = ?, avarage_total = ? WHERE week = ?', (dvc, dgt, eng, mat, sci, adp, avarage_total, week))
+            db.commit()
+            print("Data updated successfully")
+        elif user_input == "7":
             print("Goodbye!")
             break
         else:
