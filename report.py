@@ -6,7 +6,7 @@ db=sqlite3.connect(DATABASE)
 cursor = db.cursor()
 results = cursor.fetchall()
 def print_all_score():
-    cursor.execute('SELECT * FROM subject_score')
+    cursor.execute('SELECT * FROM subject_score ORDER BY week_id DESC')
     results = cursor.fetchall()
     print(f"{'WEEK':<17}{'WEEK AVARAGE TOTAL':<31}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}")
     for score in results:
@@ -63,7 +63,7 @@ while True:
         sci = input("SCI: ")
         adp = input("ADP: ")
         avarage_total = (int(dvc) + int(dgt) + int(eng) + int(mat) + int(sci) + int(adp)) / 6
-        cursor.execute('INSERT INTO subject_score (weekfortnight , dvc, dgt, eng, mat, sci, adp, avarage_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (week, dvc, dgt, eng, mat, sci, adp, avarage_total))
+        cursor.execute('INSERT INTO subject_score (weekfortnight, dvc, dgt, eng, mat, sci, adp, avarage_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (week, dvc, dgt, eng, mat, sci, adp, avarage_total))
         db.commit()
         print("Data inserted successfully")
     elif user_input == 5:
