@@ -47,13 +47,7 @@ while True:
     elif user_input == 3:
         input_subject = input("What subject(dvc/dgt/eng/mat/sci/adp)? ")
         if input_subject in ["dvc", "dgt", "eng", "mat", "sci", "adp"]:
-            cursor.execute(f'SELECT * FROM subject_score ORDER BY {input_subject} DESC')
-            results = cursor.fetchall()
-            print(header)
-            print(line)
-            for score in results:
-                print(f"Week: {score[1]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5} week avarage total: {score[8]:<10} ")
-            break
+            print("nothing")
     elif user_input == 4:
         week = input("Week: ")
         dvc = input("DVC: ")
