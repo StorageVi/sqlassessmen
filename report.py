@@ -26,7 +26,7 @@ line = ("="*107)
 
 print(line)
 print("Welcome to the report score program\nThis program will show you the score of each subject for each week and the avarage total for each week\nYou can choose to sort the data by week avarage total or by subject\nThe data is stored in a database and can be updated by the user")
-print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert new data\n5. Delete data\n6. Update data\n7. Replace data\n8. Exit")
+print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert new data\n5. Delete data\n6. Update data\n8. Exit")
 print(line)
 while True:
     try:
@@ -92,26 +92,6 @@ while True:
         else:
             print("Update cancelled.")
     elif user_input == 7:
-        print("Replace data...")
-        cursor.execute('SELECT * FROM subject_score')
-        results = cursor.fetchall()
-        week = input("Replaced original week: ")
-        new_week = input("New week: ")
-        new_dvc = input("New DVC: ")
-        new_dgt = input("New DGT: ")
-        new_eng = input("New ENG: ")
-        new_mat = input("New MAT: ")
-        new_sci = input("New SCI: ")
-        new_adp = input("New ADP: ")
-        new_avarage_total = (int(new_dvc) + int(new_dgt) + int(new_eng) + int(new_mat) + int(new_sci) + int(new_adp)) / 6
-        for score in results:
-            if score[1] == week:
-                cursor.execute('DELETE FROM subject_score WHERE weekfortnight = ?', (week,))
-                cursor.execute('INSERT INTO subject_score (weekfortnight, dvc, dgt, eng, mat, sci, adp, avarage_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', (new_week, new_dvc, new_dgt, new_eng, new_mat, new_sci, new_adp, new_avarage_total))
-                db.commit()
-                print("Data replaced successfully")
-                break
-    elif user_input == 8:
         print("Goodbye!")
         break
     else:
