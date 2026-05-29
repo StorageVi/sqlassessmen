@@ -5,28 +5,29 @@ DATABASE = 'reportscore'
 db=sqlite3.connect(DATABASE)
 cursor = db.cursor()
 results = cursor.fetchall()
+#defineing to print later fetch sql then print a spaced header and then the data for every row
 def print_all_score():
     cursor.execute('SELECT * FROM subject_score ORDER BY week_id DESC')
     results = cursor.fetchall()
-    print(f"{'WEEK':<17}{'WEEK AVARAGE TOTAL':<31}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}")
+    print(f"{'WEEK':<17}{'WEEK AVERAGE TOTAL':<31}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}")
     for score in results:
-        print(f"Week: {score[1]:<10} week avarage total: {score[8]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5}")
+        print(f"Week: {score[1]:<10} week average total: {score[8]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5}")
     return results
 
 def print_all_score_by_avarage_total():
     cursor.execute('SELECT * FROM subject_score ORDER BY avarage_total DESC')
     results = cursor.fetchall()
-    print(f"{'WEEK':<17}{'WEEK AVARAGE TOTAL':<31}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}")
+    print(f"{'WEEK':<17}{'WEEK AVERAGE TOTAL':<31}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}")
     for score in results:
-        print(f"Week: {score[1]:<10} week avarage total: {score[8]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5}")
+        print(f"Week: {score[1]:<10} week average total: {score[8]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5}")
     return results
 
-header = (f"{'WEEK':<17}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}{'WEEK AVARAGE TOTAL':<31}")
+header = (f"{'WEEK':<17}{'DVC':<11}{'DGT':<11}{'ENG':<11}{'MAT':<11}{'SCI':<11}{'ADP':<11}{'WEEK AVERAGE TOTAL':<31}")
 line = ("="*107)
 
 print(line)
-print("Welcome to the report score program\nThis program will show you the score of each subject for each week and the avarage total for each week\nYou can choose to sort the data by week avarage total or by subject\nThe data is stored in a database and can be updated by the user")
-print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert new data\n5. Delete data\n6. Update data\n8. Exit")
+print("Welcome to the report score program\nThis program will show you the score of each subject for each week and the average total for each week\nYou can choose to sort the data by week average total or by subject\nThe data is stored in a database and can be updated by the user")
+print("\n1. All data weekly\n2. Sort by week avarge\n3. Sort select by subject\n4. Insert new data\n5. Delete data\n6. Update data\n7. Exit")
 print(line)
 while True:
     try:
@@ -51,9 +52,9 @@ while True:
             results = cursor.fetchall()
             print(header)
             for score in results:
-                print(f"Week: {score[1]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5} week avarage total: {score[8]:<10} ")
+                print(f"Week: {score[1]:<10} dvc: {score[2]:<5} dgt: {score[3]:<5} eng: {score[4]:<5} mat: {score[5]:<5} sci: {score[6]:<5} adp: {score[7]:<5} week average total: {score[8]:<10} ")
     elif user_input == 4:
-        week = input("Week: ")
+        week = input("Fortnightly week:")
         dvc = input("DVC: ")
         dgt = input("DGT: ")
         eng = input("ENG: ")
@@ -65,7 +66,8 @@ while True:
         db.commit()
         print("Data inserted successfully")
     elif user_input == 5:
-        week = input("Week: ")
+        #delect row where the week that is inputted by user
+        week = input("Fortnightly week: ")
         print("Are you sure you want to delete the data? (yes/no)")
         confirm = input().lower()
         if confirm == "yes":
@@ -98,6 +100,7 @@ while True:
         print("Thats was not a valid input. Try again")
         user_input = int(input("Input command number? "))
 
+user_input = int(input("Input command number? "))
 if __name__ == "__main__":
     print("report.py is being run directly")
 else:
